@@ -12,27 +12,20 @@
 
 
 // Includes...
-
 #include "StdAfx.h"
 #include "Io.h"
 #include "RezFind.h"
 #include "Resource.h"
 
-
 // Globals...
-
 char	g_sGameRez[128] = { "" };
 char	g_sSoundRez[128] = { "" };
 
-
 // Prototypes...
-
 BOOL ExistRezFile(const char* sFile);
 BOOL ExistRezDir(const char* sDir);
 
-
 // Functions...
-
 // ----------------------------------------------------------------------- //
 //
 //	ROUTINE:	FindRezFiles
@@ -40,22 +33,16 @@ BOOL ExistRezDir(const char* sDir);
 //	PURPOSE:	Looks for game and sound rez files
 //
 // ----------------------------------------------------------------------- //
-
 BOOL FindRezFiles(HINSTANCE hInst)
 {
 	// Sanity checks...
-
 	if (!hInst) return(FALSE);
 
-
 	// Clear the strings...
-
 	g_sGameRez[0] = '\0';
 	g_sSoundRez[0] = '\0';
 
-
 	// Load the rez file base name to use...
-
 	CString sGameRezBase;
 	CString sGameRezFile;
 	CString sGameRezDir;
@@ -68,17 +55,13 @@ BOOL FindRezFiles(HINSTANCE hInst)
 	sGameRezFile = sGameRezBase + ".rez";
 	sGameRezDir  = sGameRezBase;
 
-
 	// Look for game rez in the current directory...
-
 	if (ExistRezFile(sGameRezFile))
 	{
 		strcpy_s(g_sGameRez, sizeof(g_sGameRez), sGameRezFile);
 	}
 
-
 	// If necessary, look for a rez directory in the current directory...
-
 	if (g_sGameRez[0] == '\0')
 	{
 		if (ExistRezDir(sGameRezDir))
@@ -87,17 +70,13 @@ BOOL FindRezFiles(HINSTANCE hInst)
 		}
 	}
 
-
 	// Look for sound.rez in the current directory...
-
 	if (ExistRezFile("sound.rez"))
 	{
 		strcpy_s(g_sSoundRez, sizeof(g_sSoundRez), "sound.rez");
 	}
 
-
 	// If necessary, look for a sound directory...
-
 	if (g_sSoundRez[0] == '\0')
 	{
 		if (ExistRezDir("sound"))
@@ -106,16 +85,11 @@ BOOL FindRezFiles(HINSTANCE hInst)
 		}
 	}
 
-
 	// Determine if we have enough rez info...
-
 	if (g_sGameRez[0] == '\0')
 	{
 		return(FALSE);
 	}
-
-
-	// All done...
 
 	return(TRUE);
 }
@@ -130,7 +104,6 @@ char* GetSoundRezFile()
 	return(g_sSoundRez);
 }
 
-
 // ----------------------------------------------------------------------- //
 //
 //	ROUTINE:	ExistRezFile
@@ -138,17 +111,13 @@ char* GetSoundRezFile()
 //	PURPOSE:	Determines if the given file exists
 //
 // ----------------------------------------------------------------------- //
-
 BOOL ExistRezFile(const char* sFile)
 {
 	// Sanity checks...
-
 	if (!sFile) return(FALSE);
 	if (sFile[0] == '\0') return(FALSE);
 
-
 	// Check if this file exists...
-
     struct _finddata_t c_file;
     long   hFile;
 
@@ -159,9 +128,6 @@ BOOL ExistRezFile(const char* sFile)
 	{
 		return(FALSE);
 	}
-
-
-	// All done...
 
 	return(TRUE);
 }
@@ -174,17 +140,13 @@ BOOL ExistRezFile(const char* sFile)
 //	PURPOSE:	Determines if the given directory exists
 //
 // ----------------------------------------------------------------------- //
-
 BOOL ExistRezDir(const char* sDir)
 {
 	// Sanity checks...
-
 	if (!sDir) return(FALSE);
 	if (sDir[0] == '\0') return(FALSE);
 
-
 	// Check if this directory exists...
-
     struct _finddata_t c_file;
     long   hFile;
 
@@ -196,11 +158,5 @@ BOOL ExistRezDir(const char* sDir)
 		return(FALSE);
 	}
 
-
-	// All done...
-
 	return(TRUE);
 }
-
-
-

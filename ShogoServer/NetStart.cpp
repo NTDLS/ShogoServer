@@ -12,7 +12,6 @@
 
 
 // Includes...
-
 #include "StdAfx.h"
 #include "NetStart.h"
 #include "ShogoSrv.h"
@@ -23,14 +22,12 @@
 
 
 // Guids...
-
 DGUID GAMEGUID = { /* 87EEDE80-0ED4-11d2-BA96-006008904776 */
 	0x87eede80,	0xed4, 0x11d2, 0xba, 0x96, 0x0, 0x60, 0x8, 0x90, 0x47, 0x76
 };
 
 
 // Defines...
-
 #define	DLG_NEXT		1
 #define DLG_CANCEL		2
 #define DLG_BACK		3
@@ -43,7 +40,6 @@ DGUID GAMEGUID = { /* 87EEDE80-0ED4-11d2-BA96-006008904776 */
 
 
 // Statics...
-
 static	ServerInterface*	s_pServerMgr     = NULL;
 static	ServerInfo*			s_pServerInfo    = NULL; 
 static	ServerOptions*		s_pServerOptions = NULL;
@@ -74,13 +70,11 @@ static	CStringList			s_collRezFiles;
 
 
 // Macros...
-
 #define RM_GET_FLOAT(s, f, d) { char sBuf[64] = {""}; UINT32 uSize = 62; rm.Get(s, sBuf, uSize, ""); if (strlen(sBuf) > 0) f = (float)atof(sBuf); else f = d; }
 #define RM_SET_FLOAT(s, f) { char sBuf[64]; sprintf_s(sBuf, sizeof(sBuf), "%f", f); rm.Set(s, sBuf); }
 
 
 // Prototypes...
-
 BOOL NetStart_HandleDefaultDialogCommands(HWND hDlg, WPARAM wParam);
 void NetStart_DisplayError();
 BOOL NetStart_GetWorldNightColor(HWND hParenWnd);
@@ -137,7 +131,6 @@ float GetDlgItemFloat(HWND hDlg, int iCtrl);
 
 
 // Functions...
-
 // ----------------------------------------------------------------------- //
 // These functions get/set console variable values.
 // For the Get functions, the value you pass in is used as the default value.
@@ -328,29 +321,22 @@ DRESULT NetStart_SaveConfigFile(char *pFilename)
 BOOL NetStart_DoWizard(HINSTANCE hInst, ServerInfo* pServerInfo, ServerOptions* pServerOptions, NetGame* pNetGame, BOOL bNoDlgs, char *pConfig)
 {
 	// Sanity checks...
-
 	if (!pServerInfo) return(FALSE);
 	if (!pServerOptions) return(FALSE);
 	if (!pNetGame) return(FALSE);
 
-
 	// Set our static pointers...
-
 	s_pServerInfo    = pServerInfo;
 	s_pServerOptions = pServerOptions;
 	s_pNetGame       = pNetGame;
 	s_hInst          = hInst;
 
-
 	// Clear the structures...
-
 	memset(s_pServerInfo, 0, sizeof(ServerInfo));
 	memset(s_pServerOptions, 0, sizeof(ServerOptions));
 	memset(s_pNetGame, 0, sizeof(NetGame));
 
-
 	// Fill in the default server options...
-
 	s_pServerOptions->m_bTractorBeam    = TRUE;
 	s_pServerOptions->m_bDoubleJump     = TRUE;
 	s_pServerOptions->m_bRammingDamage  = TRUE;
@@ -362,28 +348,20 @@ BOOL NetStart_DoWizard(HINSTANCE hInst, ServerInfo* pServerInfo, ServerOptions* 
 
 	strcpy_s(s_pServerOptions->m_sWorldNightColor, sizeof(s_pServerOptions->m_sWorldNightColor), "0.5 0.5 0.5");
 
-
 	// Load some string resources...
-
 	LoadString(s_hInst, IDS_DEFAULTSERVERNAME, s_sServerName, 250);
 
-
 	// Get the server interface...
-
 	s_pServerMgr = GetServerInterface();
 	if (!s_pServerMgr) 
 	{
 		return(FALSE);
 	}
 
-
 	// Load the server config file...
-
 	s_pServerMgr->LoadConfigFile(pConfig);
 
-
 	// Declare local variables we'll be using...
-
 	int		nRet;
 	int		cRezFiles       = 0;
 	HWND	hParentWnd      = NULL;
@@ -391,12 +369,9 @@ BOOL NetStart_DoWizard(HINSTANCE hInst, ServerInfo* pServerInfo, ServerOptions* 
 
 
 	// Load our icon...
-
 	s_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 
-
 	// Init the networking...
-
 	BOOL bRet = s_pServerMgr->InitNetworking(NULL, 0);
 	if (!bRet)
 	{
@@ -404,17 +379,13 @@ BOOL NetStart_DoWizard(HINSTANCE hInst, ServerInfo* pServerInfo, ServerOptions* 
 		goto Failure;
 	}
 
-
 	// Load some info...
-
 	NetStart_LoadConsoleVars();
 
 	LoadLevelStrings();
 	LoadRezStrings();
 
-
 	// Check if we should skip the dialogs...
-
 	if (bNoDlgs)
 	{
 		if (NetStart_GoNoDialogs(pServerInfo, pNetGame))
@@ -423,18 +394,14 @@ BOOL NetStart_DoWizard(HINSTANCE hInst, ServerInfo* pServerInfo, ServerOptions* 
 		}
 	}
 
-
 	// Do the services dialog...
-
 ServicesDlg:
 	nRet = DialogBox(hInst, "NET_SERVICES", hParentWnd, (DLGPROC)NetDlg_Services);
 
 	if (nRet == DLG_ERROR) goto Failure;
 	if (nRet == DLG_CANCEL) goto Cancel;
 
-
 	// Do the rez files dialog...
-
 RezFilesDlg:
 	cRezFiles = FillAvailableRez(NULL);
 	if (cRezFiles <= 0) goto GameDlg;
@@ -445,9 +412,7 @@ RezFilesDlg:
 	if (nRet == DLG_ERROR) goto Failure;
 	if (nRet == DLG_CANCEL) goto Cancel;
 
-
 	// Do the game dialog...
-
 GameDlg:
 	nRet = DialogBox(hInst, "NET_GAME", hParentWnd, (DLGPROC)NetDlg_Game);
 
@@ -456,9 +421,7 @@ GameDlg:
 	if (nRet == DLG_ERROR) goto Failure;
 	if (nRet == DLG_CANCEL) goto Cancel;
 
-
 	// Do the options dialog...
-
 OptionsDlg:
 	nRet = DialogBox(hInst, "NET_OPTIONS", hParentWnd, (DLGPROC)NetDlg_Options);
 
@@ -487,9 +450,7 @@ OptionsDlg:
 	if (nRet == DLG_ERROR) goto Failure;
 	if (nRet == DLG_CANCEL) goto Cancel;
 
-
 	// Display the "-go" info if we haven't already...
-
 	if (!s_bDashGoInfo)
 	{
 		DoOptionHelp(NULL, IDS_HELP_DASHGO, IDS_TITLE_DASHGO);
@@ -497,20 +458,14 @@ OptionsDlg:
 
 	SaveLevelStrings();
 
-
 	// All done...
-
 	return(TRUE);
 
-
 	// Cancel...
-
 Cancel:
 	return(FALSE);
 
-
 	// Failure...
-
 Failure:
 	NetStart_DisplayError();
 	return(FALSE);
@@ -538,7 +493,6 @@ int NetStart_GetPort()
 BOOL NetStart_HandleDefaultDialogCommands(HWND hDlg, WPARAM wParam)
 {
 	// Handle any default commands...
-
 	switch (wParam)
 	{
 		case IDC_BACK:
@@ -554,9 +508,7 @@ BOOL NetStart_HandleDefaultDialogCommands(HWND hDlg, WPARAM wParam)
 		}
 	}
 
-
 	// If we get here, it's not a default command...
-
 	return(FALSE);
 }
 
@@ -572,13 +524,10 @@ BOOL NetStart_HandleDefaultDialogCommands(HWND hDlg, WPARAM wParam)
 BOOL NetStart_FillServiceList(HWND hList)
 {
 	// Sanity checks...
-
 	if (!hList) return(FALSE);
 	if (!s_pServerMgr) return(FALSE);
 
-
 	// Get the service list...
-
 	NetService *pCur, *pListHead = NULL;
 
 	BOOL bRet = s_pServerMgr->GetServiceList(pListHead);
@@ -589,9 +538,7 @@ BOOL NetStart_FillServiceList(HWND hList)
 		return(FALSE);
 	}
 
-
 	// Add each service to the list box...
-
 	SendMessage(hList, LB_RESETCONTENT, 0, 0);
 
 	for (pCur=pListHead; pCur; pCur=pCur->m_pNext)
@@ -605,22 +552,15 @@ BOOL NetStart_FillServiceList(HWND hList)
 		}
 	}
 
-
 	// Select the last used service...
-
 	int nRet = SendMessage(hList, LB_SETCURSEL, s_nNetService, 0);
 	if (nRet == LB_ERR)
 	{
 		SendMessage(hList, LB_SETCURSEL, 0, 0);
 	}
 
-
 	// Free the service list...
-
 	s_pServerMgr->FreeServiceList(pListHead);
-
-
-	// All done...
 
 	return(TRUE);
 }
@@ -637,35 +577,26 @@ BOOL NetStart_FillServiceList(HWND hList)
 BOOL NetStart_SelectCurrentService(HWND hList)
 {
 	// Sanity checks...
-
 	if (!hList) return(FALSE);
 
-
 	// Get the currently select list-box item...
-
 	int nIndex = SendMessage(hList, LB_GETCURSEL, 0, 0);
 	if (nIndex == LB_ERR) return(FALSE);
 
-
 	// Get the item data for this index...
-
 	int nRet = SendMessage(hList, LB_GETITEMDATA, nIndex, 0);
 	if (nRet == LB_ERR) return(FALSE);
 
 	HNETSERVICE hNetService = (HNETSERVICE)nRet;
 	if (!hNetService) return(FALSE);
 
-
 	// Select the service...
-
 	BOOL bRet = s_pServerMgr->SelectService(hNetService);
 	if (!bRet) return(FALSE);
 
 	s_nNetService = nIndex;
 
-
 	// Get the string name...
-
 	char sBuf[128];
 	memset(sBuf, 0, sizeof(sBuf));
 	nRet = SendMessage(hList, LB_GETTEXT, nIndex, (LPARAM)sBuf);
@@ -685,9 +616,6 @@ BOOL NetStart_SelectCurrentService(HWND hList)
 			s_bIsTcpIp = TRUE;
 		}
 	}
-
-
-	// All done...
 
 	return(TRUE);
 }
@@ -769,12 +697,9 @@ BOOL CALLBACK NetDlg_Services(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
 BOOL NetStart_FillGameInfo(HWND hDlg)
 {
 	// Sanity checks...
-
 	if (!hDlg) return(FALSE);
 
-
 	// Get the server name...
-
 	char sName[128];
 	sName[0] = '\0';
 
@@ -789,7 +714,6 @@ BOOL NetStart_FillGameInfo(HWND hDlg)
 	strcpy_s(s_sServerName, sizeof(s_sServerName), sName);
 
 	// Get the game type...
-
 	int nType = NGT_DEATHMATCH;
 
 	if (IsDlgButtonChecked(hDlg, IDC_COOPERATIVE)) nType = NGT_COOPERATIVE;
@@ -797,9 +721,7 @@ BOOL NetStart_FillGameInfo(HWND hDlg)
 
 	s_pNetGame->m_byType = nType;
 
-
 	// Get the max players...
-
 	s_nMaxPlayers = GetDlgItemInt(hDlg, IDC_MAXPLAYERS, NULL, FALSE);
 	if (s_nMaxPlayers <= 0) s_nMaxPlayers = 2;
 	if (s_nMaxPlayers >= MAX_MULTI_PLAYERS) s_nMaxPlayers = MAX_MULTI_PLAYERS;
@@ -808,11 +730,7 @@ BOOL NetStart_FillGameInfo(HWND hDlg)
 
 
 	// Get the port number...
-
 	s_nPort = GetDlgItemInt(hDlg, IDC_PORT, NULL, FALSE);
-
-
-	// All done...
 
 	return(TRUE);
 }
@@ -984,18 +902,13 @@ BOOL CALLBACK NetDlg_Finished(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
 BOOL NetStart_FillLevelList(HWND hList, char* sDir, int nData)
 {
 	// Sanity checks...
-
 	if (!hList) return(FALSE);
 	if (!sDir) return(FALSE);
 
-
 	// Get a list of world names and put them in the list box...
-
 	SendMessage(hList, LB_RESETCONTENT, 0, 0);
 
-
 	// Get all the level files in the given directory...
-
 	FileEntry* pFiles = s_pServerMgr->GetFileList(sDir);
 	if (!pFiles) return(FALSE);
 
@@ -1024,13 +937,8 @@ BOOL NetStart_FillLevelList(HWND hList, char* sDir, int nData)
 
 	s_pServerMgr->FreeFileList(pFiles);
 
-
 	// Set the current selection...
-
 	SendMessage(hList, LB_SETCURSEL, 0, 0);
-
-
-	// All done...
 
 	return(TRUE);
 }
@@ -1092,12 +1000,9 @@ BOOL CALLBACK NetDlg_GameEnd(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 BOOL NetStart_FillGameEnd(HWND hDlg)
 {
 	// Sanity checks...
-
 	if (!hDlg) return(FALSE);
 
-
 	// Get the game end type...
-
 	int nType = NGE_NEVER;
 
 	if (IsDlgButtonChecked(hDlg, IDC_AFTERFRAGS) == BST_CHECKED) nType = NGE_FRAGS;
@@ -1111,26 +1016,19 @@ BOOL NetStart_FillGameEnd(HWND hDlg)
 	s_pNetGame->m_byEnd = nType;
 	s_nEndType          = nType;
 
-
 	// Get the game end value...
-
 	s_nEndFrags = GetDlgItemInt(hDlg, IDC_FRAGS, NULL, FALSE);
 	s_nEndTime  = GetDlgItemInt(hDlg, IDC_MINUTES, NULL, FALSE);
 
 	s_pNetGame->m_dwEndTime  = s_nEndTime;
 	s_pNetGame->m_dwEndFrags = s_nEndFrags;
 
-
 	// Get the max players...
-
 	s_nMaxPlayers = GetDlgItemInt(hDlg, IDC_MAXPLAYERS, NULL, FALSE);
 	if (s_nMaxPlayers <= 0) s_nMaxPlayers = 2;
 	if (s_nMaxPlayers >= MAX_MULTI_PLAYERS) s_nMaxPlayers = MAX_MULTI_PLAYERS;
 
 	s_pServerInfo->m_dwMaxPlayers = s_nMaxPlayers;
-
-
-	// All done...
 
 	return(TRUE);
 }
@@ -1226,21 +1124,16 @@ BOOL CALLBACK NetDlg_GameLevels(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
 void InitGameLevels(HWND hDlg)
 {
 	// Sanity checks...
-
 	if (!hDlg) return;
 
-
 	// Get the "save" flag...
-
 	BOOL bSave = FALSE;
 	NS_GetGameVar("SaveGameLevels", bSave);
 	if (!bSave) return;
 
 	CheckDlgButton(hDlg, IDC_SAVE, bSave ? BST_CHECKED : BST_UNCHECKED);
 
-
 	// If we get here, fill in the saved levels...
-
 	HWND hList = GetDlgItem(hDlg, IDC_GAMELIST);
 	if (!hList) return;
 
@@ -1253,7 +1146,6 @@ void InitGameLevels(HWND hDlg)
 		if (!sGameLevel.IsEmpty())
 		{
 			// Prepare the level name by stripping out the prefixes...
-
 			char sLevel[128];
 			char sTemp[128];
 			strcpy_s(sLevel, sizeof(sLevel), sGameLevel);
@@ -1279,7 +1171,6 @@ void InitGameLevels(HWND hDlg)
 
 
 			// Add the level to the list...
-
 			int nType = RETAIL_LEVEL;
 
 			_strupr_s(sTemp, sizeof(sTemp));
@@ -1303,13 +1194,10 @@ void UpdateSaveGameLevels(HWND hDlg)
 BOOL AddSelToList(HWND hSrcList, HWND hDestList)
 {
 	// Sanity checks...
-
 	if (!hSrcList) return(FALSE);
 	if (!hDestList) return(FALSE);
 
-
 	// Get the select item...
-
 	char sText[256];
 	int  nData;
 
@@ -1325,14 +1213,10 @@ BOOL AddSelToList(HWND hSrcList, HWND hDestList)
 
 
 	// Add the select stuff to the destination list...
-
 	nIndex = SendMessage(hDestList, LB_ADDSTRING, 0, (LPARAM)(LPCSTR)sText);
 	if (nIndex == LB_ERR) return(FALSE);
 
 	SendMessage(hDestList, LB_SETITEMDATA, nIndex, nData);
-
-
-	// All done...
 
 	return(TRUE);
 }
@@ -1340,29 +1224,21 @@ BOOL AddSelToList(HWND hSrcList, HWND hDestList)
 BOOL RemoveSelFromList(HWND hList)
 {
 	// Sanity checks...
-
 	if (!hList) return(FALSE);
 
-
 	// Remove the currently selected item...
-
 	int nIndex = SendMessage(hList, LB_GETCURSEL, 0, 0);
 	if (nIndex == LB_ERR) return(FALSE);
 
 	int nRet = SendMessage(hList, LB_DELETESTRING, nIndex, 0);
 	if (nRet == LB_ERR) return(FALSE);
 
-
 	// Keep something selected if possible...
-
 	nRet = SendMessage(hList, LB_SETCURSEL, nIndex, 0);
 	if (nRet == LB_ERR && nIndex > 0)
 	{
 		SendMessage(hList, LB_SETCURSEL, nIndex-1, 0);
 	}
-
-
-	// All done...
 
 	return(TRUE);
 }
@@ -1370,14 +1246,11 @@ BOOL RemoveSelFromList(HWND hList)
 void UpdateGameLevelControls(HWND hDlg)
 {
 	// Get the list boxes...
-
 	HWND hRetailList = GetDlgItem(hDlg, IDC_RETAILLIST);
 	HWND hCustomList = GetDlgItem(hDlg, IDC_CUSTOMLIST);
 	HWND hGameList   = GetDlgItem(hDlg, IDC_GAMELIST);
 
-
 	// Update the buttons...
-
 	int nRet = SendMessage(hRetailList, LB_GETCURSEL, 0, 0);
 	EnableWindow(GetDlgItem(hDlg, IDC_ADDRETAIL), nRet != LB_ERR);
 
@@ -1403,12 +1276,9 @@ void UpdateGameLevelControls(HWND hDlg)
 BOOL NetStart_FillGameLevels(HWND hDlg)
 {
 	// Sanity checks...
-
 	if (!hDlg) return(FALSE);
 
-
 	// Add each level from the game list...
-
 	s_collLevels.RemoveAll();
 
 	s_pNetGame->m_byNumLevels = 0;
@@ -1448,9 +1318,6 @@ BOOL NetStart_FillGameLevels(HWND hDlg)
 		}
 	}
 
-
-	// All done...
-
 	return(TRUE);
 }
 
@@ -1468,7 +1335,6 @@ BOOL NetStart_SetEndGameInfo(HWND hDlg)
 }
 
 
-
 // ----------------------------------------------------------------------- //
 //
 //	ROUTINE:	SaveLevelStrings
@@ -1480,9 +1346,8 @@ BOOL NetStart_SetEndGameInfo(HWND hDlg)
 void SaveLevelStrings()
 {
 	// Save the levels...
-
 	POSITION pos   = s_collLevels.GetHeadPosition();
-	int      count = 0;
+	int count = 0;
 
 	while (pos)
 	{
@@ -1496,9 +1361,7 @@ void SaveLevelStrings()
 		}
 	}
 
-
 	// Write out the level count...
-
 	SetGameVar("NumLevels", count);
 }
 
@@ -1514,13 +1377,10 @@ void SaveLevelStrings()
 void LoadLevelStrings()
 {
 	// Load the level count...
-
 	int count = 0;
 	NS_GetGameVar("NumLevels", count);
 
-
 	// Load the strings...
-
 	s_collLevels.RemoveAll();
 
 	for (int i = 0; i < count; i++)
@@ -1551,23 +1411,16 @@ void LoadLevelStrings()
 BOOL NetStart_GoNoDialogs(ServerInfo* pServerInfo, NetGame* pNetGame)
 {
 	// Sanity checks...
-
 	if (!pServerInfo) return(FALSE);
 	if (!pNetGame) return(FALSE);
 
-
 	// Make sure we have a service name...
-
 	if (strlen(s_sServiceName) <= 0) return(FALSE);
 
-
 	// Make sure we have some levels...
-
 	if (s_collLevels.GetCount() <= 0) return(FALSE);
 
-
 	// Get the service list...
-
 	NetService *pCur, *pListHead = NULL;
 
 	BOOL bRet = s_pServerMgr->GetServiceList(pListHead);
@@ -1580,7 +1433,6 @@ BOOL NetStart_GoNoDialogs(ServerInfo* pServerInfo, NetGame* pNetGame)
 
 
 	// Find the service we want...
-
 	int nIndex = -1;
 	NetService *pFound = NULL;
 
@@ -1604,9 +1456,7 @@ BOOL NetStart_GoNoDialogs(ServerInfo* pServerInfo, NetGame* pNetGame)
 
 	s_pServerMgr->FreeServiceList(pListHead);
 
-
 	// Select the service...
-
 	bRet = s_pServerMgr->SelectService(hNetService);
 	if (!bRet) return(FALSE);
 
@@ -1618,41 +1468,29 @@ BOOL NetStart_GoNoDialogs(ServerInfo* pServerInfo, NetGame* pNetGame)
 	else if (strstr(s_pServerInfo->m_sService, "modem")) strcpy_s(s_pServerInfo->m_sService, sizeof(s_pServerInfo->m_sService), "Modem");
 	else if (strstr(s_pServerInfo->m_sService, "serial")) strcpy_s(s_pServerInfo->m_sService, sizeof(s_pServerInfo->m_sService), "Serial Cable");
 
-
 	// Fill in the update options...
-
 	pServerInfo->m_bUpdateGameInfo = s_bUpdateInfo;
 	pServerInfo->m_bRegisterServer = s_bServerReg;
 
-
 	// Set the server name...
-
 	strcpy_s(pServerInfo->m_sName, sizeof(pServerInfo->m_sName), s_sServerName);
 
-
 	// Get the max players...
-
 	pServerInfo->m_dwMaxPlayers = s_nMaxPlayers;
 
-
 	// Get the game end info...
-
 	pNetGame->m_byType     = s_nGameType;
 	pNetGame->m_byEnd      = s_nEndType;
 	pNetGame->m_dwEndTime  = s_nEndTime;
 	pNetGame->m_dwEndFrags = s_nEndFrags;
 
-
 	// Add the resources...
-
 	if (!GetTheApp()->AddResources(s_collRezFiles))
 	{
 		return(FALSE);
 	}
 
-
 	// Add each level from our collection...
-
 	pNetGame->m_byNumLevels = 0;
 	for (int j = 0; j < MAX_GAME_LEVELS; j++) s_pNetGame->m_sLevels[j][0] = '\0';
 
@@ -1667,9 +1505,6 @@ BOOL NetStart_GoNoDialogs(ServerInfo* pServerInfo, NetGame* pNetGame)
 		strcpy_s(pNetGame->m_sLevels[pNetGame->m_byNumLevels], sizeof(pNetGame->m_sLevels[pNetGame->m_byNumLevels]), sLevel);
 		pNetGame->m_byNumLevels++;
 	}
-
-
-	// All done...
 
 	return(TRUE);
 }
@@ -1761,17 +1596,13 @@ BOOL CALLBACK NetDlg_RezFiles(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
 int FillAvailableRez(HWND hList)
 {
 	// Remove the current list contents...
-
 	if (hList) SendMessage(hList, LB_RESETCONTENT, 0, 0);
 
-
-	// Change to the "custom" direcotry...
-
+	// Change to the "custom" DIRECTORY...
 	if (_chdir("Custom") != 0) return(0);
 
 
 	// Enumerate the available rez files and add them to the list box...
-
 	int		count = 0;
 	long	hFile;
     struct	_finddata_t fd;
@@ -1801,14 +1632,10 @@ int FillAvailableRez(HWND hList)
 		}
 	}
 
-
 	// Restore the directory...
-
-	_chdir ("..");
-
+	_chdir("..");
 
 	// All done...
-
 	return(count);
 }
 
@@ -1824,17 +1651,12 @@ int FillAvailableRez(HWND hList)
 int FillSelectedRez(HWND hList)
 {
 	// Sanity checks...
-
 	if (!hList) return(0);
 
-
 	// Remove the current list contents...
-
 	SendMessage(hList, LB_RESETCONTENT, 0, 0);
 
-
 	// Enumerate the selected rez files and add them to the list box...
-
 	POSITION pos   = s_collRezFiles.GetHeadPosition();
 	int      count = 0;
 
@@ -1855,12 +1677,8 @@ int FillSelectedRez(HWND hList)
 		count++;
 	}
 
-
-	// All done...
-
 	return(count);
 }
-
 
 // ----------------------------------------------------------------------- //
 //
@@ -1873,13 +1691,10 @@ int FillSelectedRez(HWND hList)
 BOOL AddSelectedRez(HWND hSourceList, HWND hDestList)
 {
 	// Sanity checks...
-
 	if (!hSourceList) return(FALSE);
 	if (!hDestList) return(FALSE);
 
-
 	// Get the selected item from the source list...
-
 	int nIndex = SendMessage(hSourceList, LB_GETCURSEL, 0, 0);
 	if (nIndex == LB_ERR) return(FALSE);
 
@@ -1887,22 +1702,15 @@ BOOL AddSelectedRez(HWND hSourceList, HWND hDestList)
 	int nRet = SendMessage(hSourceList, LB_GETTEXT, nIndex, (LPARAM)(LPCSTR)sRez);
 	if (nRet == LB_ERR) return(FALSE);
 
-
 	// Check if this rez is already selected...
-
 	if (IsRezSelected(hDestList, sRez))
 	{
 		return(TRUE);
 	}
 
-
 	// Add the selected string to our list...
-
 	nRet = SendMessage(hDestList, LB_ADDSTRING, 0, (LPARAM)(LPCSTR)sRez);
 	if (nRet == LB_ERR) return(FALSE);
-
-
-	// All done...
 
 	return(TRUE);
 }
@@ -1919,33 +1727,23 @@ BOOL AddSelectedRez(HWND hSourceList, HWND hDestList)
 BOOL RemoveSelectedRez(HWND hSourceList, HWND hDestList)
 {
 	// Sanity checks...
-
 	if (!hSourceList) return(FALSE);
 	if (!hDestList) return(FALSE);
 
-
 	// Get the selected rez in the dest list...
-
 	int nIndex = SendMessage(hDestList, LB_GETCURSEL, 0, 0);
 	if (nIndex == LB_ERR) return(FALSE);
 
-
 	// Remove the current item from the dest list...
-
 	int nRet = SendMessage(hDestList, LB_DELETESTRING, nIndex, 0);
 	if (!(nRet == LB_ERR)) return(FALSE);
 
-
 	// Try to select the previous item...
-
 	nRet = SendMessage(hDestList, LB_SETCURSEL, nIndex, 0);
 	if (nRet == LB_ERR && nIndex > 0)
 	{
 		SendMessage(hDestList, LB_SETCURSEL, nIndex-1, 0);
 	}
-
-
-	// All done...
 
 	return(TRUE);
 }
@@ -1962,13 +1760,10 @@ BOOL RemoveSelectedRez(HWND hSourceList, HWND hDestList)
 BOOL IsRezSelected(HWND hDestList, const char* sRez)
 {
 	// Sanity checks...
-
 	if (!hDestList) return(FALSE);
 	if (!sRez) return(FALSE);
 
-
 	// Look for this string in the list...
-
 	int nCount = SendMessage(hDestList, LB_GETCOUNT, 0, 0);
 	if (nCount == LB_ERR) return(FALSE);
 
@@ -1985,20 +1780,16 @@ BOOL IsRezSelected(HWND hDestList, const char* sRez)
 
 
 	// If we get here, we didn't find this rez...
-
 	return(FALSE);
 }
 
 BOOL IsSourceItemAddable(HWND hSourceList, HWND hDestList)
 {
 	// Sanity checks...
-
 	if (!hSourceList) return(FALSE);
 	if (!hDestList) return(FALSE);
 
-
 	// Get the selected rez in the source list...
-
 	int nIndex = SendMessage(hSourceList, LB_GETCURSEL, 0, 0);
 	if (nIndex == LB_ERR) return(FALSE);
 
@@ -2006,22 +1797,17 @@ BOOL IsSourceItemAddable(HWND hSourceList, HWND hDestList)
 	int nRet = SendMessage(hSourceList, LB_GETTEXT, nIndex, (LPARAM)(LPCSTR)sRez);
 	if (nRet == LB_ERR) return(FALSE);
 
-
 	// Determine if this rez is already selected...
-
 	return(!IsRezSelected(hDestList, sRez));
 }
 
 BOOL IsDestItemRemovable(HWND hSourceList, HWND hDestList)
 {
 	// Sanity checks...
-
 	if (!hSourceList) return(FALSE);
 	if (!hDestList) return(FALSE);
 
-
 	// Get the selected rez in the dest list...
-
 	int nIndex = SendMessage(hDestList, LB_GETCURSEL, 0, 0);
 	return (nIndex != LB_ERR);
 }
@@ -2040,17 +1826,12 @@ void UpdateRezControls(HWND hDlg)
 int AddSelectedToList(HWND hDestList)
 {
 	// Sanity checks...
-	
 	if (!hDestList) return(0);
 
-
 	// Remove all the items from the current string list...
-
 	s_collRezFiles.RemoveAll();
 
-
 	// Add each item in the list box to our string list...
-
 	int nCount = SendMessage(hDestList, LB_GETCOUNT, 0, 0);
 	if (nCount == LB_ERR) return(0);
 
@@ -2076,9 +1857,6 @@ int AddSelectedToList(HWND hDestList)
 		}
 	}
 
-
-	// All done...
-
 	return(c);
 }
 
@@ -2094,7 +1872,6 @@ int AddSelectedToList(HWND hDestList)
 void SaveRezStrings()
 {
 	// Save each rez file string...
-
 	POSITION pos    = s_collRezFiles.GetHeadPosition();
 	int      nCount = 0;
 
@@ -2111,7 +1888,6 @@ void SaveRezStrings()
 	}
 
 	// Save the count of strings...
-
 	SetGameVar("NumRezFiles", nCount);
 } 
 
@@ -2127,20 +1903,15 @@ void SaveRezStrings()
 void LoadRezStrings()
 {
 	// Clear the list of rez files...
-
 	s_collRezFiles.RemoveAll();
 
-
 	// Load the count of rez strings...
-
 	int nCount = 0;
 
 	if (!NS_GetGameVar("NumRezFiles", nCount)) return;
 	if (nCount <= 0) return;
 
-
 	// Load the strings...
-
 	for (int i = 0; i < nCount; i++)
 	{
 		char sLabel[32];
@@ -2322,10 +2093,8 @@ BOOL NetStart_FillOptions(HWND hDlg)
 BOOL NetStart_RunServerOptions(ServerInterface* pServerMgr, ServerOptions* pServerOptions)
 {
 	// Sanity checks...
-
 	if (!pServerMgr) return(FALSE);
 	if (!pServerOptions) return(FALSE);
-
 
 	// Run the toggle options...
 
@@ -2340,9 +2109,7 @@ BOOL NetStart_RunServerOptions(ServerInterface* pServerMgr, ServerOptions* pServ
 	sprintf_s(sBuf, sizeof(sBuf), "RammingDamage %i", pServerOptions->m_bRammingDamage);
 	pServerMgr->RunConsoleString(sBuf);
 
-
 	// Run the speed options...
-
 	if (pServerOptions->m_fRunSpeed != 0)
 	{
 		sprintf_s(sBuf, sizeof(sBuf), "RunSpeed %f", pServerOptions->m_fRunSpeed);
@@ -2357,7 +2124,6 @@ BOOL NetStart_RunServerOptions(ServerInterface* pServerMgr, ServerOptions* pServ
 
 
 	// Run the scale options...
-
 	if (pServerOptions->m_fRespawnScale != 0)
 	{
 		sprintf_s(sBuf, sizeof(sBuf), "RespawnScale %f", pServerOptions->m_fRespawnScale);
@@ -2370,9 +2136,7 @@ BOOL NetStart_RunServerOptions(ServerInterface* pServerMgr, ServerOptions* pServ
 		pServerMgr->RunConsoleString(sBuf);
 	}
 
-
 	// Run the world options...
-
 	if (pServerOptions->m_fWorldTimeSpeed != 0)
 	{
 		sprintf_s(sBuf, sizeof(sBuf), "WorldTimeSpeed %f", pServerOptions->m_fWorldTimeSpeed);
@@ -2384,9 +2148,6 @@ BOOL NetStart_RunServerOptions(ServerInterface* pServerMgr, ServerOptions* pServ
 		sprintf_s(sBuf, sizeof(sBuf), "WorldColorNight \"%s\"", pServerOptions->m_sWorldNightColor);
 		pServerMgr->RunConsoleString(sBuf);
 	}
-
-
-	// All done...
 
 	return(TRUE);
 }
@@ -2403,21 +2164,16 @@ BOOL NetStart_RunServerOptions(ServerInterface* pServerMgr, ServerOptions* pServ
 BOOL NetStart_DoOptionsDialog(HWND hParentWnd, ServerInterface* pServerMgr, ServerOptions* pServerOptions)
 {
 	// Sanity checks...
-
 	if (!pServerMgr) return(FALSE);
 	if (!pServerOptions) return(FALSE);
 
-
 	// Do the dialog...
-
 	if (!s_hInst) s_hInst = GetModuleHandle(NULL);
 
 	int nRet = DialogBox(s_hInst, "SERVER_OPTIONS", hParentWnd, (DLGPROC)NetDlg_Options);
 	if (nRet != DLG_NEXT) return(FALSE);
 
-
 	// Run the console options...
-
 	if (!NetStart_RunServerOptions(pServerMgr, pServerOptions))
 	{
 		return(FALSE);
@@ -2434,9 +2190,6 @@ BOOL NetStart_DoOptionsDialog(HWND hParentWnd, ServerInterface* pServerMgr, Serv
 	SetGameVar("RespawnScale", s_pServerOptions->m_fRespawnScale);
 	SetGameVar("HealScale", s_pServerOptions->m_fHealScale);
 	
-
-	// All done...
-
 	return(TRUE);
 }
 
@@ -2452,15 +2205,12 @@ BOOL NetStart_DoOptionsDialog(HWND hParentWnd, ServerInterface* pServerMgr, Serv
 BOOL NetStart_GetWorldNightColor(HWND hParenWnd)
 {
 	// Do the color dialog...
-
 	CColorDialog dlg;
 
 	int nRet = dlg.DoModal();
 	if (nRet != IDOK) return(FALSE);
 
-
 	// Update the color...
-
 	COLORREF cr = dlg.GetColor();
 
 	BYTE byRed   = (BYTE)(cr);
@@ -2473,14 +2223,5 @@ BOOL NetStart_GetWorldNightColor(HWND hParenWnd)
 
 	sprintf_s(s_pServerOptions->m_sWorldNightColor, sizeof(s_pServerOptions->m_sWorldNightColor), "%.2f %.2f %.2f", fRed, fGreen, fBlue);
 
-
-	// All done...
-
 	return(TRUE);
 }
-
-
-
-
-
-

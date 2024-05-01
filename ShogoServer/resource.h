@@ -1,5 +1,5 @@
 //{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
+// Microsoft Visual C++ generated include file.
 // Used by ShogoSrv.rc
 //
 #define IDS_NETERR_GENERIC              1
@@ -53,8 +53,8 @@
 #define IDS_SPYGAMEKEY                  132
 #define IDS_WEBGAMENAME                 133
 #define IDS_WEBGAMEVER                  134
-#define IDS_WEBREGURL                   135
-#define IDS_WEBREGHOST                  136
+#define IDS_WEBREGHOST                  135
+#define IDS_WEBREGURL                   136
 #define IDS_WEBUNREGURL                 137
 #define IDS_WEBPINGBACK                 138
 #define IDS_WEBPLAYERSURL               139

@@ -52,7 +52,6 @@ WORD	g_wPort = 0;
 
 #define DEFAULT_PORT	27888
 
-CString g_sWebGameName;
 CString	g_sWebGameVer;
 CString g_sWebRegUrl;
 CString g_sWebPlayersUrl;
@@ -249,7 +248,6 @@ BOOL CGameServDlg::Init()
 
 
 	// Load some strings...
-	g_sWebGameName.LoadString(IDS_WEBGAMENAME);
 	g_sWebGameVer.LoadString(IDS_WEBGAMEVER);
 	g_sWebRegHost.LoadString(IDS_WEBREGHOST);
 	g_sWebRegUrl.LoadString(IDS_WEBREGURL);
@@ -834,7 +832,6 @@ BOOL CGameServDlg::UpdateServerRegistration(DWORD timeDelta)
 			}
 			iLastSlashPos--;
 		}
-
 
 		for(size_t i = 0; i < strlen(g_ServerInfo.m_sName); i++)
 		{

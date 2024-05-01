@@ -66,6 +66,5 @@
     <CustomBuild Include="res\ShogoSrv.rc2">
       <Filter>Resource Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="ReadMe.txt" />
   </ItemGroup>
 </Project>
