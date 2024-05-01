@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CoolServ.cpp">
+    <ClCompile Include="ShogoSrv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameServDlg.cpp">
@@ -41,12 +41,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="CoolServ.rc">
+    <ResourceCompile Include="ShogoSrv.rc">
       <Filter>Source Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CoolServ.h">
+    <ClInclude Include="ShogoSrv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
@@ -60,10 +60,10 @@
     <CustomBuild Include="bitmap1.bmp">
       <Filter>Resource Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="res\CoolServ.ico">
+    <CustomBuild Include="res\ShogoSrv.ico">
       <Filter>Resource Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="res\CoolServ.rc2">
+    <CustomBuild Include="res\ShogoSrv.rc2">
       <Filter>Resource Files</Filter>
     </CustomBuild>
     <CustomBuild Include="ReadMe.txt" />

@@ -2,7 +2,7 @@
 
 // Includes...
 #include "stdafx.h"
-#include "coolserv.h"
+#include "ShogoSrv.h"
 #include "GameServDlg.h"
 #include "NetStart.h"
 #include "Sparam.h"

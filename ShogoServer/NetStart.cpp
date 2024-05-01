@@ -15,7 +15,7 @@
 
 #include "StdAfx.h"
 #include "NetStart.h"
-#include "CoolServ.h"
+#include "ShogoSrv.h"
 #include "Resource.h"
 #include "ServerUtils.h"
 #include "Direct.h"

@@ -1,11 +1,11 @@
-// CoolServ.cpp : Defines the class behaviors for the application.
+// ShogoSrv.cpp : Defines the class behaviors for the application.
 //
 
 
 // Includes...
 
 #include "stdafx.h"
-#include "CoolServ.h"
+#include "ShogoSrv.h"
 #include "GameServDlg.h"
 #include "NetStart.h"
 #include "ServerUtils.h"
@@ -39,10 +39,10 @@ BOOL			g_bEmptyExit = FALSE;
 // Functions...
 
 /////////////////////////////////////////////////////////////////////////////
-// CCoolServApp
+// CShogoSrvApp
 
-BEGIN_MESSAGE_MAP(CCoolServApp, CWinApp)
-	//{{AFX_MSG_MAP(CCoolServApp)
+BEGIN_MESSAGE_MAP(CShogoSrvApp, CWinApp)
+	//{{AFX_MSG_MAP(CShogoSrvApp)
 		// NOTE - the ClassWizard will add and remove mapping macros here.
 		//    DO NOT EDIT what you see in these blocks of generated code!
 	//}}AFX_MSG
@@ -50,28 +50,28 @@ BEGIN_MESSAGE_MAP(CCoolServApp, CWinApp)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
-// CCoolServApp construction
+// CShogoSrvApp construction
 
-CCoolServApp::CCoolServApp(LPCTSTR lpszAppName) : CWinApp(lpszAppName)
+CShogoSrvApp::CShogoSrvApp(LPCTSTR lpszAppName) : CWinApp(lpszAppName)
 {
 	// TODO: add construction code here,
 	// Place all significant initialization in InitInstance
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// The one and only CCoolServApp object
+// The one and only CShogoSrvApp object
 
-CCoolServApp theApp("GameServ");
+CShogoSrvApp theApp("GameServ");
 
-CCoolServApp* GetTheApp()
+CShogoSrvApp* GetTheApp()
 {
 	return(&theApp);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CCoolServApp initialization
+// CShogoSrvApp initialization
 
-BOOL CCoolServApp::InitInstance()
+BOOL CShogoSrvApp::InitInstance()
 {
 	AfxEnableControlContainer();
 
@@ -220,7 +220,7 @@ BOOL CCoolServApp::InitInstance()
 	return FALSE;
 }
 
-BOOL CCoolServApp::OnIdle(LONG lCount) 
+BOOL CShogoSrvApp::OnIdle(LONG lCount) 
 {
 	return CWinApp::OnIdle(lCount);
 }
@@ -234,7 +234,7 @@ BOOL CCoolServApp::OnIdle(LONG lCount)
 	i++; \
 }
 
-BOOL CCoolServApp::AddResources(CStringList& collRezFiles)
+BOOL CShogoSrvApp::AddResources(CStringList& collRezFiles)
 {
 	// Specify the main resources...
 

@@ -63,7 +63,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Debug\</AssemblerListingLocation>
       <BrowseInformation>true</BrowseInformation>
-      <PrecompiledHeaderOutputFile>.\Debug\CoolServ.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>.\Debug\ShogoSrv.pch</PrecompiledHeaderOutputFile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <ObjectFileName>.\Debug\</ObjectFileName>
@@ -78,7 +78,7 @@
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <TypeLibraryName>.\Debug\CoolServ.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Debug\ShogoSrv.tlb</TypeLibraryName>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <RedirectOutputAndErrors>NUL</RedirectOutputAndErrors>
       <TargetEnvironment>Win32</TargetEnvironment>
@@ -89,7 +89,7 @@
     </ResourceCompile>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Debug\CoolServ.bsc</OutputFile>
+      <OutputFile>.\Debug\ShogoSrv.bsc</OutputFile>
     </Bscmake>
     <Link>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -112,7 +112,7 @@
       <AdditionalIncludeDirectories>\proj\de\dist\inc;\proj\de\api;\proj\de\shared;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AssemblerListingLocation>.\Release\</AssemblerListingLocation>
-      <PrecompiledHeaderOutputFile>.\Release\CoolServ.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>.\Release\ShogoSrv.pch</PrecompiledHeaderOutputFile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
       <ObjectFileName>.\Release\</ObjectFileName>
@@ -121,7 +121,7 @@
     <Midl>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <TypeLibraryName>.\Release\CoolServ.tlb</TypeLibraryName>
+      <TypeLibraryName>.\Release\ShogoSrv.tlb</TypeLibraryName>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <RedirectOutputAndErrors>NUL</RedirectOutputAndErrors>
       <TargetEnvironment>Win32</TargetEnvironment>
@@ -132,7 +132,7 @@
     </ResourceCompile>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Release\CoolServ.bsc</OutputFile>
+      <OutputFile>.\Release\ShogoSrv.bsc</OutputFile>
     </Bscmake>
     <Link>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -142,7 +142,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CoolServ.cpp" />
+    <ClCompile Include="ShogoSrv.cpp" />
     <ClCompile Include="GameServDlg.cpp" />
     <ClCompile Include="NetStart.cpp" />
     <ClCompile Include="RezFind.cpp" />
@@ -157,17 +157,17 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="CoolServ.rc" />
+    <ResourceCompile Include="ShogoSrv.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CoolServ.h" />
+    <ClInclude Include="ShogoSrv.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="StdAfx.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="bitmap1.bmp" />
-    <CustomBuild Include="res\CoolServ.ico" />
-    <CustomBuild Include="res\CoolServ.rc2">
+    <CustomBuild Include="res\ShogoSrv.ico" />
+    <CustomBuild Include="res\ShogoSrv.rc2">
       <FileType>RC</FileType>
     </CustomBuild>
     <CustomBuild Include="ReadMe.txt" />

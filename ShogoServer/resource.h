@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // Microsoft Developer Studio generated include file.
-// Used by CoolServ.rc
+// Used by ShogoSrv.rc
 //
 #define IDS_NETERR_GENERIC              1
 #define IDS_NETERR_SELECTSERVICE        2
@@ -16,7 +16,7 @@
 #define IDM_ABOUTBOX                    0x0010
 #define IDD_ABOUTBOX                    100
 #define IDS_ABOUTBOX                    101
-#define IDD_COOLSERV_DIALOG             102
+#define IDD_SHOGOSRV_DIALOG             102
 #define IDS_ERROR_REZFILE               102
 #define IDS_ERROR_LOADREZ               103
 #define IDS_ERROR_LOADSERVER            104

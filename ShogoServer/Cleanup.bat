@@ -3,3 +3,5 @@ rd debug /S /Q
 del *.ncb
 del *.user
 del *.plg
+del *.suo
+
