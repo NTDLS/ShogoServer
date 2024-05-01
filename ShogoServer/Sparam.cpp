@@ -69,7 +69,7 @@ BOOL Sparam_Get(char* sDest, const char* sSource, const char* sId)
 //				the new param and id!
 //
 // ----------------------------------------------------------------------- //
-BOOL Sparam_Add(char* sSource, const char* sId, const char* sParam)
+BOOL Sparam_Add(char* sSource, size_t szSource, const char* sId, const char* sParam)
 {
 	// Sanity checks...
 	ASSERT(sSource);
@@ -77,24 +77,23 @@ BOOL Sparam_Add(char* sSource, const char* sId, const char* sParam)
 	if (!sParam) return(FALSE);
 
 	// Add the real id...
-	strcat_s(sSource, sizeof(sSource), "[");
-	strcat_s(sSource, sizeof(sSource), sId);
-	strcat_s(sSource, sizeof(sSource), ":");
+	strcat_s(sSource, szSource, "[");
+	strcat_s(sSource, szSource, sId);
+	strcat_s(sSource, szSource, ":");
 
 	// Add the param...
-	strcat_s(sSource, sizeof(sSource), sParam);
+	strcat_s(sSource, szSource, sParam);
 
 	// Add the closing id...
-	strcat_s(sSource, sizeof(sSource), "]");
+	strcat_s(sSource, szSource, "]");
 
-	// All done...
 	return(TRUE);
 }
 
-BOOL Sparam_Add(char* sSource, const char* sId, int nParam)
+BOOL Sparam_Add(char* sSource, size_t szSource, const char* sId, int nParam)
 {
 	char sTmp[256];
 	wsprintf(sTmp, "%i", nParam);
 
-	return(Sparam_Add(sSource, sId, sTmp));
+	return(Sparam_Add(sSource, szSource, sId, sTmp));
 }

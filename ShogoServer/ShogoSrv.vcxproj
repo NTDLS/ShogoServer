@@ -160,9 +160,16 @@
     <ResourceCompile Include="ShogoSrv.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameServDlg.h" />
+    <ClInclude Include="NetDefs.h" />
+    <ClInclude Include="NetStart.h" />
+    <ClInclude Include="RezFind.h" />
+    <ClInclude Include="ServerUtils.h" />
     <ClInclude Include="ShogoSrv.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Sparam.h" />
     <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="bitmap1.bmp" />

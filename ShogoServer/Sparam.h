@@ -2,7 +2,7 @@
 ;
 ;	 MODULE:		SPARAM (.H)
 ;
-;	PURPOSE:		String Parameter funcions
+;	PURPOSE:		String Parameter functions
 ;
 ;	HISTORY:		10/13/96 [blg] This file was created
 ;
@@ -10,20 +10,13 @@
 ;
 ****************************************************************************/
 
-
 #ifndef _SPARAM_H_
 #define _SPARAM_H_
 
-
 // Prototypes...
-
 BOOL	Sparam_Get(char* sDest, const char* sSource, const char* sId);
-BOOL	Sparam_Add(char* sSource, const char* sId, const char* sParam);
-BOOL	Sparam_Add(char* sSource, const char* sId, int nParam);
+BOOL	Sparam_Add(char* sSource, size_t szSource, const char* sId, const char* sParam);
+BOOL	Sparam_Add(char* sSource, size_t szSource, const char* sId, int nParam);
 BOOL	Sparam_Remove(char* sSource, const char* sId);
 
-
-// EOF...
-
 #endif
-

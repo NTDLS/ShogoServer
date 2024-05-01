@@ -398,10 +398,10 @@ BOOL CGameServDlg::StartServer()
 	CString sHost;
 	sHost.LoadString(IDS_APPNAME);
 
-	Sparam_Add(nh.m_sName, NST_GAMENAME,  g_ServerInfo.m_sName);
-	Sparam_Add(nh.m_sName, NST_GAMEHOST,  sHost);
-	Sparam_Add(nh.m_sName, NST_GAMELEVEL, g_NetGame.m_sLevels[0]);
-	Sparam_Add(nh.m_sName, NST_GAMETYPE,  g_NetGame.m_byType);
+	Sparam_Add(nh.m_sName, sizeof(nh.m_sName), NST_GAMENAME,  g_ServerInfo.m_sName);
+	Sparam_Add(nh.m_sName, sizeof(nh.m_sName), NST_GAMEHOST,  sHost);
+	Sparam_Add(nh.m_sName, sizeof(nh.m_sName), NST_GAMELEVEL, g_NetGame.m_sLevels[0]);
+	Sparam_Add(nh.m_sName, sizeof(nh.m_sName), NST_GAMETYPE,  g_NetGame.m_byType);
 
 	if (m_pServerMgr->HostGame(&nh) != DTRUE)
 	{
