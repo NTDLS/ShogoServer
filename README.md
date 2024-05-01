@@ -5,3 +5,7 @@ Augmented version of the original ShogoServer from March 11th of 1999, for more 
 
 This server was last built using Visual Studio 2020 on windows 11.
 
+# See Also
+* https://github.com/NTDLS/ShogoServersCom
+* https://github.com/NTDLS/ShogoServer/
+* https://ShogoServers.Com/
