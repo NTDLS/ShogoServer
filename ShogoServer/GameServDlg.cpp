@@ -148,7 +148,7 @@ void SS_Trace(const char *pMsg, ...)
 		va_list marker;
 
 		va_start(marker, pMsg);
-		vsprintf(buf, pMsg, marker);
+		vsprintf_s(buf, sizeof(buf), pMsg, marker);
 		va_end(marker);
 
 		OutputDebugString(buf);
@@ -420,7 +420,7 @@ BOOL CGameServDlg::StartServer()
 	req.m_pGameInfo   = &g_NetGame;
 	req.m_GameInfoLen = sizeof(NetGame_t);
 
-	strcpy(req.m_WorldName, g_NetGame.m_sLevels[0]);
+	strcpy_s(req.m_WorldName, sizeof(req.m_WorldName), g_NetGame.m_sLevels[0]);
 
 	if (m_pServerMgr->StartWorld(&req) != DTRUE)
 	{
@@ -531,14 +531,14 @@ void CGameServDlg::WriteConsoleString(LPCTSTR pMsg, ...)
 	}
 
 	va_start(marker, pMsg);
-	vsprintf(str, pMsg, marker);
+	vsprintf_s(str, sizeof(str), pMsg, marker);
 	va_end(marker);
 
 	int len = strlen(str);
 	if (len <= 0) return;
 	if (len > 0 && str[len-1] < 32) str[len-1] = '\0';
 
-	strcat(str, "\r\n");
+	strcat_s(str, sizeof(str), "\r\n");
 
 	nLen = m_edConsole.SendMessage(EM_GETLIMITTEXT, 0, 0);
 	m_edConsole.SetSel(nLen, nLen);
@@ -822,14 +822,14 @@ BOOL CGameServDlg::UpdateServerRegistration(DWORD timeDelta)
 
 
 		char sLevelName[255];
-		strcpy(sLevelName, m_sCurLevel);
+		strcpy_s(sLevelName, sizeof(sLevelName), m_sCurLevel);
 		int iLastSlashPos = strlen(sLevelName) - 1;
 		while(iLastSlashPos > -1)
 		{
 			if(sLevelName[iLastSlashPos] == '\\')
 			{
 				iLastSlashPos++;
-				strcpy(sLevelName, sLevelName + iLastSlashPos);
+				strcpy_s(sLevelName, sizeof(sLevelName), sLevelName + iLastSlashPos);
 				break;
 			}
 			iLastSlashPos--;
@@ -1096,7 +1096,7 @@ void CGameServDlg::OnStandardUpdate(char* pMsg)
 
 		if (Sparam_Get(sName, pMsg, sBase))
 		{
-			strcpy(m_aPis[j].sName, sName);
+			strcpy_s(m_aPis[j].sName, sizeof(m_aPis[j].sName), sName);
 
 			wsprintf(sBase, "%s%i", NST_PLRFRAG_BASE, i);
 
@@ -1473,7 +1473,7 @@ void CGameServDlg::OnProcessNetPacket(char* sData, DWORD nLen, BYTE senderAddr[4
 	char sAddr[128];
 	if(nLen > 0 && sData[0] == '\\')
 	{
-		sprintf(sAddr, "%d.%d.%d.%d", senderAddr[0], senderAddr[1], senderAddr[2], senderAddr[3]);
+		sprintf_s(sAddr, sizeof(sAddr), "%d.%d.%d.%d", senderAddr[0], senderAddr[1], senderAddr[2], senderAddr[3]);
 		//TODO: Cool info ^^
 	}
 }

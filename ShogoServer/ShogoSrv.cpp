@@ -1,7 +1,6 @@
 // ShogoSrv.cpp : Defines the class behaviors for the application.
 //
 
-
 // Includes...
 
 #include "stdafx.h"
@@ -14,12 +13,10 @@
 
 
 // Macros...
-
 #define IsKeyDown(key)  (GetAsyncKeyState(key) & 0x80000000)
 
 
 // Debug...
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -28,7 +25,6 @@ static char THIS_FILE[] = __FILE__;
 
 
 // Globals...
-
 ServerInfo		g_ServerInfo;
 ServerOptions	g_ServerOptions;
 NetGame			g_NetGame;
@@ -59,9 +55,8 @@ CShogoSrvApp::CShogoSrvApp(LPCTSTR lpszAppName) : CWinApp(lpszAppName)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// The one and only CShogoSrvApp object
 
-CShogoSrvApp theApp("GameServ");
+CShogoSrvApp theApp("GameServ"); // The one and only CShogoSrvApp object
 
 CShogoSrvApp* GetTheApp()
 {
@@ -75,27 +70,13 @@ BOOL CShogoSrvApp::InitInstance()
 {
 	AfxEnableControlContainer();
 
-	// Standard initialization
-	// If you are not using these features and wish to reduce the size
-	//  of your final executable, you should remove from the following
-	//  the specific initialization routines you do not need.
-
-#ifdef _AFXDLL
-	Enable3dControls();			// Call this when using MFC in a shared DLL
-#else
-	Enable3dControlsStatic();	// Call this when linking to MFC statically
-#endif
-
-
-	// Get our instance handle...
-
 	g_hInst = AfxGetInstanceHandle();
 
 	char *pDLLName = "server.dll";
 	int i;
 	for(i=0; i < (__argc-1); i++)
 	{
-		if(stricmp(__argv[i], "-DLL") == 0)
+		if(_stricmp(__argv[i], "-DLL") == 0)
 		{
 			pDLLName = __argv[i+1];
 			break;
@@ -121,13 +102,13 @@ BOOL CShogoSrvApp::InitInstance()
 	}
 
 
-	// Check command-line paramters...
+	// Check command-line parameters...
 
 	BOOL bNoDlgs = FALSE;
 
 	char sCmdLine[256];
-	strcpy(sCmdLine, theApp.m_lpCmdLine);
-	strupr(sCmdLine);
+	strcpy_s(sCmdLine, sizeof(sCmdLine), theApp.m_lpCmdLine);
+	_strupr_s(sCmdLine, sizeof(sCmdLine));
 
 	if (strlen(sCmdLine) > 0 && strstr(sCmdLine, "-GO"))
 	{
@@ -140,14 +121,14 @@ BOOL CShogoSrvApp::InitInstance()
 	}
 
 	char configFile[256];
-	strcpy(configFile, "server.cfg");
+	strcpy_s(configFile, sizeof(configFile), "server.cfg");
 	LoadString(g_hInst, IDS_CONFIGFILE, configFile, 250);
 
 	for (i = 0; i < (__argc-1); i++)
 	{
-		if (stricmp(__argv[i], "-CONFIG") == 0)
+		if (_stricmp(__argv[i], "-CONFIG") == 0)
 		{
-			strncpy(configFile, __argv[i+1], sizeof(configFile));
+			strncpy_s(configFile, sizeof(configFile), __argv[i+1], sizeof(configFile));
 		}
 	}
 
@@ -229,7 +210,7 @@ BOOL CShogoSrvApp::OnIdle(LONG lCount)
 { \
 	char sRezFile[128]; \
 	wsprintf(sRezFile, "%s%s.rez", sBase, sPost); \
-	strcpy(sTemps[i], sRezFile); \
+	strcpy_s(sTemps[i], sizeof(sTemps[i]), sRezFile); \
 	sGame[i] = sTemps[i]; \
 	i++; \
 }
@@ -280,7 +261,7 @@ BOOL CShogoSrvApp::AddResources(CStringList& collRezFiles)
 	{
 		CString sRezFile = collRezFiles.GetNext(pos);
 
-		strcpy(sTemps[i], sRezFile);
+		strcpy_s(sTemps[i], sizeof(sTemps[i]), sRezFile);
 		sGame[i] = sTemps[i];
 		i++;
 	}

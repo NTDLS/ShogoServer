@@ -110,7 +110,7 @@ BOOL HttpPostJson(const char* sUrl, const char* sPostData, BOOL bWait)
 		DWORD dwSize = 0;
 		char  sBuf[1024];
 
-		strcpy(sBuf, "");
+		strcpy_s(sBuf, sizeof(sBuf), "");
 
 		if (!InternetReadFile(hRequest, sBuf, 1000, &dwSize))
 		{
@@ -162,7 +162,7 @@ BOOL HttpGet(const char* sUrl, const char* queryString, BOOL bWait)
 		DWORD dwSize = 0;
 		char  sBuf[1024];
 
-		strcpy(sBuf, "");
+		strcpy_s(sBuf, sizeof(sBuf), "");
 
 		if (!InternetReadFile(hHttp, sBuf, 1000, &dwSize))
 		{

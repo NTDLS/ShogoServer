@@ -76,7 +76,7 @@ static	CStringList			s_collRezFiles;
 // Macros...
 
 #define RM_GET_FLOAT(s, f, d) { char sBuf[64] = {""}; UINT32 uSize = 62; rm.Get(s, sBuf, uSize, ""); if (strlen(sBuf) > 0) f = (float)atof(sBuf); else f = d; }
-#define RM_SET_FLOAT(s, f) { char sBuf[64]; sprintf(sBuf, "%f", f); rm.Set(s, sBuf); }
+#define RM_SET_FLOAT(s, f) { char sBuf[64]; sprintf_s(sBuf, sizeof(sBuf), "%f", f); rm.Set(s, sBuf); }
 
 
 // Prototypes...
@@ -150,7 +150,7 @@ BOOL SetGameVar(const char *pName, const char *pVal)
 	if(!s_pServerMgr)
 		return FALSE;
 
-	sprintf(str, "\"+%s\" \"%s\"", pName, pVal);
+	sprintf_s(str, sizeof(str), "\"+%s\" \"%s\"", pName, pVal);
 	s_pServerMgr->RunConsoleString(str);
 	return TRUE;
 }
@@ -159,7 +159,7 @@ void SetGameVar(const char *pName, float val)
 {
 	char valStr[256];
 
-	sprintf(valStr, "%f", val);
+	sprintf_s(valStr, sizeof(valStr), "%f", val);
 	SetGameVar(pName, valStr);
 }
 
@@ -167,7 +167,7 @@ void SetGameVar(const char *pName, int val)
 {
 	char valStr[256];
 
-	sprintf(valStr, "%d", val);
+	sprintf_s(valStr, sizeof(valStr), "%d", val);
 	SetGameVar(pName, valStr);
 }
 
@@ -197,7 +197,7 @@ BOOL NS_GetGameVar(char *pName, int &val)
 	if(!s_pServerMgr)
 		return FALSE;
 
-	sprintf(valStr, "%d", val);
+	sprintf_s(valStr, sizeof(valStr), "%d", val);
 	if(s_pServerMgr->GetConsoleVar(pName, &hVar, valStr) == LT_OK)
 	{
 		if(s_pServerMgr->GetVarValueString(hVar, valStr, sizeof(valStr)) == LT_OK)
@@ -224,7 +224,7 @@ BOOL NS_GetGameVar(char *pName, float &val)
 	if(!s_pServerMgr)
 		return FALSE;
 
-	sprintf(valStr, "%f", val);
+	sprintf_s(valStr, sizeof(valStr), "%f", val);
 	if(s_pServerMgr->GetConsoleVar(pName, &hVar, valStr) == LT_OK)
 	{
 		if(s_pServerMgr->GetVarValueString(hVar, valStr, sizeof(valStr)) == LT_OK)
@@ -360,7 +360,7 @@ BOOL NetStart_DoWizard(HINSTANCE hInst, ServerInfo* pServerInfo, ServerOptions* 
 	s_pServerOptions->m_fRespawnScale   = 1.0;
 	s_pServerOptions->m_fHealScale      = 1.0;
 
-	strcpy(s_pServerOptions->m_sWorldNightColor, "0.5 0.5 0.5");
+	strcpy_s(s_pServerOptions->m_sWorldNightColor, sizeof(s_pServerOptions->m_sWorldNightColor), "0.5 0.5 0.5");
 
 
 	// Load some string resources...
@@ -667,20 +667,21 @@ BOOL NetStart_SelectCurrentService(HWND hList)
 	// Get the string name...
 
 	char sBuf[128];
+	memset(sBuf, 0, sizeof(sBuf));
 	nRet = SendMessage(hList, LB_GETTEXT, nIndex, (LPARAM)sBuf);
 	if (nRet == LB_ERR) s_pServerInfo->m_sService[0] = '\0';
 	else
 	{
-		strcpy(s_pServerInfo->m_sService, sBuf);
-		strcpy(s_sServiceName, s_pServerInfo->m_sService);
-		strlwr(sBuf);
+		strcpy_s(s_pServerInfo->m_sService, sizeof(s_pServerInfo->m_sService), sBuf);
+		strcpy_s(s_sServiceName, sizeof(s_sServiceName), s_pServerInfo->m_sService);
+		_strlwr_s(sBuf, sizeof(sBuf));
 
-		if (strstr(sBuf, "ipx")) strcpy(s_pServerInfo->m_sService, "Ipx");
-		else if (strstr(sBuf, "modem")) strcpy(s_pServerInfo->m_sService, "Modem");
-		else if (strstr(sBuf, "serial")) strcpy(s_pServerInfo->m_sService, "Serial Cable");
+		if (strstr(sBuf, "ipx")) strcpy_s(s_pServerInfo->m_sService, sizeof(s_pServerInfo->m_sService), "Ipx");
+		else if (strstr(sBuf, "modem")) strcpy_s(s_pServerInfo->m_sService, sizeof(s_pServerInfo->m_sService), "Modem");
+		else if (strstr(sBuf, "serial")) strcpy_s(s_pServerInfo->m_sService, sizeof(s_pServerInfo->m_sService), "Serial Cable");
 		else if (strstr(sBuf, "tcp"))
 		{
-			strcpy(s_pServerInfo->m_sService, "Tcp/ip");
+			strcpy_s(s_pServerInfo->m_sService, sizeof(s_pServerInfo->m_sService), "Tcp/ip");
 			s_bIsTcpIp = TRUE;
 		}
 	}
@@ -784,9 +785,8 @@ BOOL NetStart_FillGameInfo(HWND hDlg)
 		LoadString(s_hInst, IDS_DEFAULTSERVERNAME, sName, 124);
 	}
 
-	strcpy(s_pServerInfo->m_sName, sName);
-	strcpy(s_sServerName, sName);
-
+	strcpy_s(s_pServerInfo->m_sName, sizeof(s_pServerInfo->m_sName), sName);
+	strcpy_s(s_sServerName, sizeof(s_sServerName), sName);
 
 	// Get the game type...
 
@@ -1005,10 +1005,10 @@ BOOL NetStart_FillLevelList(HWND hList, char* sDir, int nData)
 	{
 		if (ptr->m_Type == TYPE_FILE)
 		{
-			if (strnicmp(&ptr->m_pBaseFilename[strlen(ptr->m_pBaseFilename) - 4], ".dat", 4) == 0)
+			if (_strnicmp(&ptr->m_pBaseFilename[strlen(ptr->m_pBaseFilename) - 4], ".dat", 4) == 0)
 			{
 				char sLevel[128];
-				strcpy(sLevel, ptr->m_pBaseFilename);
+				strcpy_s(sLevel, sizeof(sLevel), ptr->m_pBaseFilename);
 				int len = strlen(sLevel);
 				if (len > 4) sLevel[len - 4] = '\0';
 				int nIndex = SendMessage(hList, LB_ADDSTRING, 0, (LPARAM)sLevel);
@@ -1256,8 +1256,8 @@ void InitGameLevels(HWND hDlg)
 
 			char sLevel[128];
 			char sTemp[128];
-			strcpy(sLevel, sGameLevel);
-			strcpy(sTemp, sGameLevel);
+			strcpy_s(sLevel, sizeof(sLevel), sGameLevel);
+			strcpy_s(sTemp, sizeof(sTemp), sGameLevel);
 
 			int nLen = strlen(sTemp);
 
@@ -1273,7 +1273,7 @@ void InitGameLevels(HWND hDlg)
 				if (i < nLen - 1)
 				{
 					if (sTemp[i] == '\\') i++;
-					strcpy(sLevel, &sTemp[i]);
+					strcpy_s(sLevel, sizeof(sLevel), &sTemp[i]);
 				}
 			}
 
@@ -1282,7 +1282,7 @@ void InitGameLevels(HWND hDlg)
 
 			int nType = RETAIL_LEVEL;
 
-			strupr(sTemp);
+			_strupr_s(sTemp, sizeof(sTemp));
 			if (!strstr(sTemp, "\\MULTI\\"))
 			{
 				nType = CUSTOM_LEVEL;
@@ -1442,7 +1442,7 @@ BOOL NetStart_FillGameLevels(HWND hDlg)
 				wsprintf(sLevel, "Worlds\\Multi\\%s", sText);
 			}
 
-			strcpy(s_pNetGame->m_sLevels[s_pNetGame->m_byNumLevels], sLevel);
+			strcpy_s(s_pNetGame->m_sLevels[s_pNetGame->m_byNumLevels], sizeof(s_pNetGame->m_sLevels[s_pNetGame->m_byNumLevels]), sLevel);
 			s_collLevels.AddTail(sLevel);
 			s_pNetGame->m_byNumLevels++;
 		}
@@ -1528,7 +1528,7 @@ void LoadLevelStrings()
 		char sLabel[32];
 		char sLevel[128];
 		wsprintf(sLabel, "Level%i", i);
-		strcpy(sLevel, "");
+		strcpy_s(sLevel, sizeof(sLevel), "");
 
 		NS_GetGameVar(sLabel, sLevel, 120);
 
@@ -1586,7 +1586,7 @@ BOOL NetStart_GoNoDialogs(ServerInfo* pServerInfo, NetGame* pNetGame)
 
 	for (pCur=pListHead; pCur; pCur=pCur->m_pNext)
 	{
-		if (stricmp(pCur->m_sName, s_sServiceName) == 0)
+		if (_stricmp(pCur->m_sName, s_sServiceName) == 0)
 		{
 			pFound = pCur;
 			break;
@@ -1610,13 +1610,13 @@ BOOL NetStart_GoNoDialogs(ServerInfo* pServerInfo, NetGame* pNetGame)
 	bRet = s_pServerMgr->SelectService(hNetService);
 	if (!bRet) return(FALSE);
 
-	strcpy(s_pServerInfo->m_sService, s_sServiceName);
-	strlwr(s_pServerInfo->m_sService);
+	strcpy_s(s_pServerInfo->m_sService, sizeof(s_pServerInfo->m_sService), s_sServiceName);
+	_strlwr_s(s_pServerInfo->m_sService, sizeof(s_pServerInfo->m_sService));
 
-	if (strstr(s_pServerInfo->m_sService, "ipx")) strcpy(s_pServerInfo->m_sService, "Ipx");
-	else if (strstr(s_pServerInfo->m_sService, "tcp")) strcpy(s_pServerInfo->m_sService, "Tcp/ip");
-	else if (strstr(s_pServerInfo->m_sService, "modem")) strcpy(s_pServerInfo->m_sService, "Modem");
-	else if (strstr(s_pServerInfo->m_sService, "serial")) strcpy(s_pServerInfo->m_sService, "Serial Cable");
+	if (strstr(s_pServerInfo->m_sService, "ipx")) strcpy_s(s_pServerInfo->m_sService, sizeof(s_pServerInfo->m_sService), "Ipx");
+	else if (strstr(s_pServerInfo->m_sService, "tcp")) strcpy_s(s_pServerInfo->m_sService, sizeof(s_pServerInfo->m_sService), "Tcp/ip");
+	else if (strstr(s_pServerInfo->m_sService, "modem")) strcpy_s(s_pServerInfo->m_sService, sizeof(s_pServerInfo->m_sService), "Modem");
+	else if (strstr(s_pServerInfo->m_sService, "serial")) strcpy_s(s_pServerInfo->m_sService, sizeof(s_pServerInfo->m_sService), "Serial Cable");
 
 
 	// Fill in the update options...
@@ -1627,7 +1627,7 @@ BOOL NetStart_GoNoDialogs(ServerInfo* pServerInfo, NetGame* pNetGame)
 
 	// Set the server name...
 
-	strcpy(pServerInfo->m_sName, s_sServerName);
+	strcpy_s(pServerInfo->m_sName, sizeof(pServerInfo->m_sName), s_sServerName);
 
 
 	// Get the max players...
@@ -1664,7 +1664,7 @@ BOOL NetStart_GoNoDialogs(ServerInfo* pServerInfo, NetGame* pNetGame)
 	while (pos)
 	{
 		CString sLevel = s_collLevels.GetNext(pos);
-		strcpy(pNetGame->m_sLevels[pNetGame->m_byNumLevels], sLevel);
+		strcpy_s(pNetGame->m_sLevels[pNetGame->m_byNumLevels], sizeof(pNetGame->m_sLevels[pNetGame->m_byNumLevels]), sLevel);
 		pNetGame->m_byNumLevels++;
 	}
 
@@ -1767,7 +1767,7 @@ int FillAvailableRez(HWND hList)
 
 	// Change to the "custom" direcotry...
 
-	if (chdir("Custom") != 0) return(0);
+	if (_chdir("Custom") != 0) return(0);
 
 
 	// Enumerate the available rez files and add them to the list box...
@@ -1779,7 +1779,7 @@ int FillAvailableRez(HWND hList)
 	hFile = _findfirst("*.rez", &fd);
 	if (hFile == -1)
 	{
-		chdir ("..");
+		_chdir ("..");
 		return(0);
 	}
 
@@ -1804,7 +1804,7 @@ int FillAvailableRez(HWND hList)
 
 	// Restore the directory...
 
-	chdir ("..");
+	_chdir ("..");
 
 
 	// All done...
@@ -1843,11 +1843,11 @@ int FillSelectedRez(HWND hList)
 		CString sRez = s_collRezFiles.GetNext(pos);
 
 		char sTemp[128];
-		strncpy(sTemp, sRez, 125);
-		strupr(sTemp);
+		strncpy_s(sTemp, sizeof(sTemp), sRez, 125);
+		_strupr_s(sTemp, sizeof(sTemp));
 		if (strncmp(sTemp, "CUSTOM\\", 7) == 0)
 		{
-			strncpy(sTemp, sRez, 125);
+			strncpy_s(sTemp, sizeof(sTemp), sRez, 125);
 			sRez = &sTemp[7];
 		}
 
@@ -2069,7 +2069,7 @@ int AddSelectedToList(HWND hDestList)
 			else
 			{
 				char sTemp[256];
-				sprintf(sTemp, "Custom\\%s", sRez);
+				sprintf_s(sTemp, sizeof(sTemp), "Custom\\%s", sRez);
 				s_collRezFiles.AddTail(sTemp);
 			}
 			c++;
@@ -2104,7 +2104,7 @@ void SaveRezStrings()
 		if (!sRez.IsEmpty())
 		{
 			char sLabel[32];
-			sprintf(sLabel, "RezFile%i", nCount);
+			sprintf_s(sLabel, sizeof(sLabel), "RezFile%i", nCount);
 			SetGameVar(sLabel, sRez);
 			nCount++;
 		}
@@ -2144,7 +2144,7 @@ void LoadRezStrings()
 	for (int i = 0; i < nCount; i++)
 	{
 		char sLabel[32];
-		sprintf(sLabel, "RezFile%i", i);
+		sprintf_s(sLabel, sizeof(sLabel), "RezFile%i", i);
 
 		char sRez[128] = { "" };
 		NS_GetGameVar(sLabel, sRez, 125);
@@ -2276,7 +2276,7 @@ BOOL NetStart_InitOptions(HWND hDlg)
 void SetDlgItemFloat(HWND hDlg, int iCtrl, float fValue)
 {
 	char sBuf[64];
-	sprintf(sBuf, "%f", fValue);
+	sprintf_s(sBuf, sizeof(sBuf), "%f", fValue);
 	SetDlgItemText(hDlg, iCtrl, sBuf);
 }
 
@@ -2331,13 +2331,13 @@ BOOL NetStart_RunServerOptions(ServerInterface* pServerMgr, ServerOptions* pServ
 
 	char sBuf[128];
 
-	sprintf(sBuf, "TractorBeam %i", pServerOptions->m_bTractorBeam);
+	sprintf_s(sBuf, sizeof(sBuf), "TractorBeam %i", pServerOptions->m_bTractorBeam);
 	pServerMgr->RunConsoleString(sBuf);
 
-	sprintf(sBuf, "DoubleJump %i", pServerOptions->m_bDoubleJump);
+	sprintf_s(sBuf, sizeof(sBuf), "DoubleJump %i", pServerOptions->m_bDoubleJump);
 	pServerMgr->RunConsoleString(sBuf);
 
-	sprintf(sBuf, "RammingDamage %i", pServerOptions->m_bRammingDamage);
+	sprintf_s(sBuf, sizeof(sBuf), "RammingDamage %i", pServerOptions->m_bRammingDamage);
 	pServerMgr->RunConsoleString(sBuf);
 
 
@@ -2345,13 +2345,13 @@ BOOL NetStart_RunServerOptions(ServerInterface* pServerMgr, ServerOptions* pServ
 
 	if (pServerOptions->m_fRunSpeed != 0)
 	{
-		sprintf(sBuf, "RunSpeed %f", pServerOptions->m_fRunSpeed);
+		sprintf_s(sBuf, sizeof(sBuf), "RunSpeed %f", pServerOptions->m_fRunSpeed);
 		pServerMgr->RunConsoleString(sBuf);
 	}
 
 	if (pServerOptions->m_fMissileSpeed != 0)
 	{
-		sprintf(sBuf, "MissileSpeed %f", pServerOptions->m_fMissileSpeed);
+		sprintf_s(sBuf, sizeof(sBuf), "MissileSpeed %f", pServerOptions->m_fMissileSpeed);
 		pServerMgr->RunConsoleString(sBuf);
 	}
 
@@ -2360,13 +2360,13 @@ BOOL NetStart_RunServerOptions(ServerInterface* pServerMgr, ServerOptions* pServ
 
 	if (pServerOptions->m_fRespawnScale != 0)
 	{
-		sprintf(sBuf, "RespawnScale %f", pServerOptions->m_fRespawnScale);
+		sprintf_s(sBuf, sizeof(sBuf), "RespawnScale %f", pServerOptions->m_fRespawnScale);
 		pServerMgr->RunConsoleString(sBuf);
 	}
 
 	if (pServerOptions->m_fHealScale != 0)
 	{
-		sprintf(sBuf, "HealScale %f", pServerOptions->m_fHealScale);
+		sprintf_s(sBuf, sizeof(sBuf), "HealScale %f", pServerOptions->m_fHealScale);
 		pServerMgr->RunConsoleString(sBuf);
 	}
 
@@ -2375,13 +2375,13 @@ BOOL NetStart_RunServerOptions(ServerInterface* pServerMgr, ServerOptions* pServ
 
 	if (pServerOptions->m_fWorldTimeSpeed != 0)
 	{
-		sprintf(sBuf, "WorldTimeSpeed %f", pServerOptions->m_fWorldTimeSpeed);
+		sprintf_s(sBuf, sizeof(sBuf), "WorldTimeSpeed %f", pServerOptions->m_fWorldTimeSpeed);
 		pServerMgr->RunConsoleString(sBuf);
 	}
 
 	if (pServerOptions->m_sWorldNightColor[0] != '\0')
 	{
-		sprintf(sBuf, "WorldColorNight \"%s\"", pServerOptions->m_sWorldNightColor);
+		sprintf_s(sBuf, sizeof(sBuf), "WorldColorNight \"%s\"", pServerOptions->m_sWorldNightColor);
 		pServerMgr->RunConsoleString(sBuf);
 	}
 
@@ -2471,7 +2471,7 @@ BOOL NetStart_GetWorldNightColor(HWND hParenWnd)
 	float fGreen = (float)byGreen / 255.0f;
 	float fBlue  = (float)byBlue / 255.0f;
 
-	sprintf(s_pServerOptions->m_sWorldNightColor, "%.2f %.2f %.2f", fRed, fGreen, fBlue);
+	sprintf_s(s_pServerOptions->m_sWorldNightColor, sizeof(s_pServerOptions->m_sWorldNightColor), "%.2f %.2f %.2f", fRed, fGreen, fBlue);
 
 
 	// All done...

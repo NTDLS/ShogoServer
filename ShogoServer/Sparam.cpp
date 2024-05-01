@@ -99,19 +99,19 @@ BOOL Sparam_Add(char* sSource, const char* sId, const char* sParam)
 	
 	// Add the real id...
 
-	strcat(sSource, "[");
-	strcat(sSource, sId);
-	strcat(sSource, ":");
+	strcat_s(sSource, sizeof(sSource), "[");
+	strcat_s(sSource, sizeof(sSource), sId);
+	strcat_s(sSource, sizeof(sSource), ":");
 
 
 	// Add the param...
 
-	strcat(sSource, sParam);
+	strcat_s(sSource, sizeof(sSource), sParam);
 
 
 	// Add the closing id...
 
-	strcat(sSource, "]");
+	strcat_s(sSource, sizeof(sSource), "]");
 
 
 	// All done...

@@ -73,7 +73,7 @@ BOOL FindRezFiles(HINSTANCE hInst)
 
 	if (ExistRezFile(sGameRezFile))
 	{
-		strcpy(g_sGameRez, sGameRezFile);
+		strcpy_s(g_sGameRez, sizeof(g_sGameRez), sGameRezFile);
 	}
 
 
@@ -83,7 +83,7 @@ BOOL FindRezFiles(HINSTANCE hInst)
 	{
 		if (ExistRezDir(sGameRezDir))
 		{
-			strcpy(g_sGameRez, sGameRezDir);
+			strcpy_s(g_sGameRez, sizeof(g_sGameRez), sGameRezDir);
 		}
 	}
 
@@ -92,7 +92,7 @@ BOOL FindRezFiles(HINSTANCE hInst)
 
 	if (ExistRezFile("sound.rez"))
 	{
-		strcpy(g_sSoundRez, "sound.rez");
+		strcpy_s(g_sSoundRez, sizeof(g_sSoundRez), "sound.rez");
 	}
 
 
@@ -102,7 +102,7 @@ BOOL FindRezFiles(HINSTANCE hInst)
 	{
 		if (ExistRezDir("sound"))
 		{
-			strcpy(g_sSoundRez, "sound");
+			strcpy_s(g_sSoundRez, sizeof(g_sSoundRez), "sound");
 		}
 	}
 
