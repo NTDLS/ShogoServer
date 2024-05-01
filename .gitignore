@@ -12,3 +12,7 @@ ShogoServer/CoolServ.ncb
 ShogoServer/CoolServ.suo
 
 *.user
+
+ShogoServer/CoolServ.plg
+
+ShogoServer/CoolServ.dsw
