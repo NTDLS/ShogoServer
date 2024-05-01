@@ -275,8 +275,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 2,3,0,0
- PRODUCTVERSION 2,3,0,0
+ FILEVERSION 3,0,0,0
+ PRODUCTVERSION 3,0,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -294,12 +294,12 @@ BEGIN
             VALUE "Comments", "monolith@lith.com"
             VALUE "CompanyName", "Monolith Productions Inc."
             VALUE "FileDescription", "Shogo Stand-Alone Server (NTDLS Build 2024)"
-            VALUE "FileVersion", "2.3.0.0"
+            VALUE "FileVersion", "3.0.0.0"
             VALUE "InternalName", "ShogoServ"
             VALUE "LegalCopyright", "Copyright (C) 1998, Monolith Productions, Inc."
             VALUE "OriginalFilename", "ShogoSrv.exe"
             VALUE "ProductName", "ShogoServ"
-            VALUE "ProductVersion", "2.3.0.0"
+            VALUE "ProductVersion", "3.0.0.0"
         END
     END
     BLOCK "VarFileInfo"
@@ -406,7 +406,7 @@ END
 STRINGTABLE
 BEGIN
     IDS_DEFAULTSERVERNAME   "Shogo Server"
-    IDS_WEBGAMEVER          "3.0"
+    IDS_WEBGAMEVER          "3.0.0"
     IDS_WEBREGHOST          "shogoservers.com"
     IDS_WEBREGURL           "/api/Sync/Register"
     IDS_WEBUNREGURL         "/api/Sync/Unregister"
