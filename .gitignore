@@ -1,0 +1,14 @@
+
+ShogoServer/.vs/
+
+ShogoServer/Debug/
+
+ShogoServer/CoolServ.aps
+
+ShogoServer/CoolServ.dsp
+
+ShogoServer/CoolServ.ncb
+
+ShogoServer/CoolServ.suo
+
+*.user
