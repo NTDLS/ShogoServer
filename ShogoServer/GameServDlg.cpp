@@ -55,7 +55,6 @@ WORD	g_wPort = 0;
 CString	g_sWebGameVer;
 CString g_sWebRegUrl;
 CString g_sWebPlayersUrl;
-CString g_sWebPingbackUrl;
 CString g_sWebUnregUrl;
 CString g_sWebRegHost;
 char g_sServerGuid[48];
@@ -252,7 +251,6 @@ BOOL CGameServDlg::Init()
 	g_sWebRegHost.LoadString(IDS_WEBREGHOST);
 	g_sWebRegUrl.LoadString(IDS_WEBREGURL);
 	g_sWebPlayersUrl.LoadString(IDS_WEBPLAYERSURL);
-	g_sWebPingbackUrl.LoadString(IDS_WEBPINGBACK);
 	g_sWebUnregUrl.LoadString(IDS_WEBUNREGURL);
 
 
@@ -946,12 +944,6 @@ BOOL CGameServDlg::UpdateServerRegistration(DWORD timeDelta)
 
 		// Send the server info the web page...
 		HttpPostJson(g_sWebRegUrl, postMessage, FALSE);
-
-		//CString url;
-		//url.Format("http://%s/%s", g_sWebRegHost, g_sWebPingbackUrl);
-		//CString query;
-		//part.Format("ServerId=%s&IPAddress=%s&Port=%d", g_sServerGuid, g_ServerInfo.m_sAddress, g_wPort);
-		//HttpGet(url, part, FALSE);
 
 		result = TRUE;
 	}
