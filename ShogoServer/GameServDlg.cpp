@@ -36,7 +36,6 @@ DWORD	g_timeCur   = 0;
 DWORD	g_timeLast  = 0;
 DWORD	g_timeDelta = 0;
 DWORD	g_timeStart = 0;
-int		g_lastPlayerCount = 0;
 
 DWORD	g_dwPosted  = 0;
 DWORD	g_dwHandled = 0;
@@ -839,7 +838,9 @@ BOOL CGameServDlg::UpdateServerRegistration(DWORD timeDelta)
 			}
 		}
 
-		for(int p = 0; p < g_lastPlayerCount; p++)
+		int currentPlayerCount = m_pServerMgr->GetNumClients();
+
+		for(int p = 0; p < currentPlayerCount; p++)
 		{
 			//BEGIN->UPDATE PLAYER NAMES TO CENTRAL SHOGOSERVERS.com
 			CString postMessage;
@@ -889,7 +890,7 @@ BOOL CGameServDlg::UpdateServerRegistration(DWORD timeDelta)
 		part.Format("\"IPAddress\":\"%s\",", g_ServerInfo.m_sAddress);
 		postMessage += part;
 		part.Empty();
-		part.Format("\"Players\":\"%d\",", m_pServerMgr->GetNumClients());
+		part.Format("\"Players\":\"%d\",", currentPlayerCount);
 		postMessage += part;
 		part.Empty();
 		part.Format("\"LevelName\":\"%s\",", sLevelName);
@@ -1071,8 +1072,6 @@ void CGameServDlg::OnStandardUpdate(char* pMsg)
 	{
 		count = atoi(sTemp);
 	}
-
-	g_lastPlayerCount = count;
 
 	for (int i = 1; i <= count; i++)
 	{
