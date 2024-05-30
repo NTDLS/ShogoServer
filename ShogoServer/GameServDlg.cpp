@@ -779,9 +779,7 @@ void CGameServDlg::UpdateTimers()
 		m_timeLevelLast = m_timeLevelRunning;
 	}
 
-
 	// Remove any update messages in the queue...
-
 	RemoveMessage(WM_TIMER, 500);
 }
 
@@ -815,7 +813,6 @@ BOOL CGameServDlg::UpdateServerRegistration(DWORD timeDelta)
 		if (!g_ServerInfo.m_bRegisterServer) return(FALSE);
 		if (g_ServerInfo.m_sAddress[0] == '\0') return(FALSE);
 
-
 		char sLevelName[255];
 		strcpy_s(sLevelName, sizeof(sLevelName), m_sCurLevel);
 		int iLastSlashPos = strlen(sLevelName) - 1;
@@ -838,10 +835,15 @@ BOOL CGameServDlg::UpdateServerRegistration(DWORD timeDelta)
 			}
 		}
 
-		int currentPlayerCount = m_pServerMgr->GetNumClients();
+		int iPlayerCount = 0;
 
-		for(int p = 0; p < currentPlayerCount; p++)
+		PLAYERINFO* playerInfo = GetFirstPlayerInfo();
+		while (playerInfo != NULL)
 		{
+			char sMessage[255];
+			sprintf_s(sMessage, sizeof(sMessage), "Player Check In for '%s'.", playerInfo->sName);
+			WriteConsoleString(sMessage);
+
 			//BEGIN->UPDATE PLAYER NAMES TO CENTRAL SHOGOSERVERS.com
 			CString postMessage;
 			CString part;
@@ -852,14 +854,16 @@ BOOL CGameServDlg::UpdateServerRegistration(DWORD timeDelta)
 			part.Format("\"ServerId\":\"%s\",", g_sServerGuid);
 			postMessage += part;
 			part.Empty();
-
-			part.Format("\"Ping\":\"%d\",", m_aPis[p].dwPing);
+			part.Format("\"UserId\":\"%d\",", playerInfo->dwID);
 			postMessage += part;
 			part.Empty();
-			part.Format("\"Alias\":\"%s\",", m_aPis[p].sName);
+			part.Format("\"Ping\":\"%d\",", playerInfo->dwPing);
 			postMessage += part;
 			part.Empty();
-			part.Format("\"Frags\":\"%i\"", m_aPis[p].nFrags);
+			part.Format("\"Alias\":\"%s\",", playerInfo->sName);
+			postMessage += part;
+			part.Empty();
+			part.Format("\"Frags\":\"%i\"", playerInfo->nFrags);
 			postMessage += part;
 			part.Empty();
 
@@ -868,6 +872,9 @@ BOOL CGameServDlg::UpdateServerRegistration(DWORD timeDelta)
 			HttpPostJson(g_sWebPlayersUrl, postMessage, FALSE);
 
 			//END->UPDATE PLAYER NAMES TO CENTRAL SHOGOSERVERS.com 
+
+			playerInfo = GetNextPlayerInfo();
+			iPlayerCount++;
 		}
 		
 		// Build the info string...
@@ -884,13 +891,13 @@ BOOL CGameServDlg::UpdateServerRegistration(DWORD timeDelta)
 		part.Format("\"Name\":\"%s\",", g_ServerInfo.m_sName);
 		postMessage += part;
 		part.Empty();
-		part.Format("\"Version\":\"%s\",", g_sWebGameVer);
+		part.Format("\"Version\":\"%s\",", g_sWebGameVer.GetString());
 		postMessage += part;
 		part.Empty();
 		part.Format("\"IPAddress\":\"%s\",", g_ServerInfo.m_sAddress);
 		postMessage += part;
 		part.Empty();
-		part.Format("\"Players\":\"%d\",", currentPlayerCount);
+		part.Format("\"Players\":\"%d\",", iPlayerCount);
 		postMessage += part;
 		part.Empty();
 		part.Format("\"LevelName\":\"%s\",", sLevelName);
