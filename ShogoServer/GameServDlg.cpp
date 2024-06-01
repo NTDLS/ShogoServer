@@ -879,6 +879,10 @@ BOOL CGameServDlg::UpdateServerRegistration(DWORD timeDelta)
 		
 		// Build the info string...
 
+		char sMessage[255];
+		sprintf_s(sMessage, sizeof(sMessage), "Server Check In for '%s' (%s).", g_ServerInfo.m_sName, g_sServerGuid);
+		WriteConsoleString(sMessage);
+
 		CString postMessage;
 		CString part;
 
@@ -968,21 +972,25 @@ BOOL CGameServDlg::UnregisterServer()
 
 	// Build the info string...
 
+	char sMessage[255];
+	sprintf_s(sMessage, sizeof(sMessage), "Server Deregister for '%s' (%s).", g_ServerInfo.m_sName, g_sServerGuid);
+	WriteConsoleString(sMessage);
+
 	CString sInfo;
 
-		CString postMessage;
-		CString part;
+	CString postMessage;
+	CString part;
 
-		postMessage += "{";
+	postMessage += "{";
 
-		part.Empty();
-		part.Format("\"Id\":\"%s\"", g_sServerGuid);
-		postMessage += part;
-		part.Empty();
+	part.Empty();
+	part.Format("\"Id\":\"%s\"", g_sServerGuid);
+	postMessage += part;
+	part.Empty();
 
-		postMessage += "}";
+	postMessage += "}";
 
-		//WriteConsoleString(postMessage);
+	//WriteConsoleString(postMessage);
 	// Send the server info the web page...
 	HttpPostJson(g_sWebUnregUrl, postMessage, FALSE);
 
